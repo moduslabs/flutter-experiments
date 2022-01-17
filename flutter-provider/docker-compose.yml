@@ -1,0 +1,13 @@
+version: "3.5"
+
+services:
+  client:
+    container_name: flutter-experiments-provider-client
+    build: ./client
+    ports:
+      - 8081:8081
+  server:
+    container_name: flutter-experiments-provider-server
+    build: ./server
+    ports:
+      - 8080:8080
