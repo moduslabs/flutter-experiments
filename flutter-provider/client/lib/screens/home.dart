@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider_experiment/models/index.dart';
+
+import '../models/index.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);

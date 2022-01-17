@@ -1,11 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:provider_experiment/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthModel extends ChangeNotifier {
-  final SharedPreferences _prefs;
+import '../injector.dart';
 
-  AuthModel(this._prefs);
+class AuthModel extends ChangeNotifier {
+  final SharedPreferences _prefs = getIt<SharedPreferences>();
 
   bool get isAuthenticated {
     return _prefs.getBool('isAuthenticated') ?? false;
@@ -21,7 +21,7 @@ class AuthModel extends ChangeNotifier {
   }
 
   Future<void> login(String user, String pwd) async {
-    final res = await Client().init().post("/login", data: {
+    final res = await getIt<Dio>().post("/login", data: {
       'login': user,
       'pwd': pwd,
     });

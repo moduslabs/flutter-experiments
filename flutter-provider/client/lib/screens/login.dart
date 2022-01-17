@@ -1,10 +1,7 @@
-// Copyright 2020 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_experiment/models/index.dart';
+
+import '../models/index.dart';
 
 class Login extends StatelessWidget {
   final TextEditingController _emailController =

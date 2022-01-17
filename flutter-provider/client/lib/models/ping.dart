@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:provider_experiment/client.dart';
 
 import 'auth.dart';
+import '../injector.dart';
 
 class PingModel extends ChangeNotifier {
   AuthModel? _auth;
@@ -33,7 +33,7 @@ class PingModel extends ChangeNotifier {
 
   Future<void> ping() async {
     try {
-      final res = await Client().init().get<List>("/ping");
+      final res = await getIt<Dio>().get<List>("/ping");
       if (res.data != null) {
         _items?.addAll(res.data!);
         notifyListeners();

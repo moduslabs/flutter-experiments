@@ -2,19 +2,16 @@ import "package:dio/dio.dart";
 
 String? _csrf;
 
-Dio _newDio() {
-  Dio dio = Dio();
+Dio newDio({BaseOptions? options, bool? useCsrfInterceptor}) {
+  Dio dio = Dio(options);
   dio.options.baseUrl = "http://localhost:8080";
   dio.options.extra['withCredentials'] = true;
-  return dio;
-}
 
-class Client {
-  Dio init() {
-    Dio _dio = _newDio();
-    _dio.interceptors.add(CsrfInterceptor());
-    return _dio;
+  if (useCsrfInterceptor == true) {
+    dio.interceptors.add(CsrfInterceptor());
   }
+
+  return dio;
 }
 
 class CsrfInterceptor extends QueuedInterceptorsWrapper {
@@ -25,7 +22,7 @@ class CsrfInterceptor extends QueuedInterceptorsWrapper {
       return handler.next(options);
     }
 
-    _newDio().get('/csrf').then((data) {
+    newDio().get('/csrf').then((data) {
       options.headers['X-CSRF-TOKEN'] = _csrf = data.data['token'];
       handler.next(options);
     }).catchError((err) {

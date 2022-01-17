@@ -3,13 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:provider_experiment/models/index.dart';
 import 'package:provider_experiment/screens/login.dart';
 import 'package:provider_experiment/screens/home.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'injector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
+  await setup();
   runApp(ChangeNotifierProvider(
-      create: (context) => AuthModel(prefs), child: const App()));
+      create: (context) => AuthModel(), child: const App()));
 }
 
 class App extends StatelessWidget {
