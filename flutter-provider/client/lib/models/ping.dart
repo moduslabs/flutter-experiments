@@ -7,6 +7,7 @@ import '../injector.dart';
 class PingModel extends ChangeNotifier {
   AuthModel? _auth;
   List? _items;
+  int count = 0;
 
   update(AuthModel auth) {
     _auth = auth;
@@ -18,6 +19,7 @@ class PingModel extends ChangeNotifier {
 
   reset([bool notify = true]) {
     _items = null;
+    count = 0;
     if (notify) {
       notifyListeners();
     }
@@ -36,15 +38,12 @@ class PingModel extends ChangeNotifier {
       final res = await getIt<Dio>().get<List>("/ping");
       if (res.data != null) {
         _items?.addAll(res.data!);
+        count++;
         notifyListeners();
       }
-    } on DioError catch (e) {
-      if ([401, 403].contains(e.response?.statusCode)) {
-        _auth?.logout();
-        return;
-      }
-
-      rethrow;
+    } catch (e) {
+      _auth?.logout();
+      return;
     }
   }
 }

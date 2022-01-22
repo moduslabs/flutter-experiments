@@ -12,9 +12,24 @@ class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
 
   _login(BuildContext context) async {
-    context
+    if (await context
         .read<AuthModel>()
-        .login(_emailController.text, _passwordController.text);
+        .login(_emailController.text, _passwordController.text)) {
+      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+      return;
+    }
+
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Wrong credentials'),
+              actions: [
+                ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK')),
+              ],
+            ));
   }
 
   @override
@@ -38,6 +53,7 @@ class Login extends StatelessWidget {
               ),
               TextFormField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(
                   hintText: 'Password',
                 ),
@@ -48,6 +64,13 @@ class Login extends StatelessWidget {
               ElevatedButton(
                 child: const Text('ENTER'),
                 onPressed: () => _login(context),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              ElevatedButton(
+                child: const Text('See stats'),
+                onPressed: () => Navigator.pushNamed(context, '/stats'),
               )
             ],
           ),

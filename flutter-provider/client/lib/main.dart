@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_experiment/models/index.dart';
-import 'package:provider_experiment/screens/login.dart';
-import 'package:provider_experiment/screens/home.dart';
+import 'package:provider_experiment/screens/index.dart';
 
 import 'injector.dart';
 
@@ -29,12 +28,20 @@ class App extends StatelessWidget {
             title: "Experiment",
             theme: ThemeData(primarySwatch: Colors.blue),
             routes: {
-              '/': (context) => genRoute(context, const Home()),
-              '/login': (context) => Login(),
+              '/': (context) => _buildRoute(context, const Home()),
+              '/stats': (context) => const Stats(),
+              '/login': (context) => _buildRoute(context, Login(),
+                  redirectTo: '/', authCheck: false),
             }));
   }
 }
 
-Widget genRoute(BuildContext context, Widget widget) {
-  return context.watch<AuthModel>().isAuthenticated ? widget : Login();
+Widget _buildRoute(BuildContext context, Widget widget,
+    {bool authCheck = true, String redirectTo = '/login'}) {
+  if (context.watch<AuthModel>().isAuthenticated == authCheck) {
+    return widget;
+  }
+  Future.microtask(() =>
+      Navigator.pushNamedAndRemoveUntil(context, redirectTo, (_) => false));
+  return Container();
 }

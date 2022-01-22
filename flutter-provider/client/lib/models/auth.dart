@@ -20,16 +20,17 @@ class AuthModel extends ChangeNotifier {
     isAuthenticated = false;
   }
 
-  Future<void> login(String user, String pwd) async {
-    final res = await getIt<Dio>().post("/login", data: {
-      'login': user,
-      'pwd': pwd,
-    });
-
-    if (res.statusCode != 200) {
-      logout();
+  Future<bool> login(String user, String pwd) async {
+    try {
+      await getIt<Dio>().post("/login", data: {
+        'login': user,
+        'pwd': pwd,
+      });
+    } catch (e) {
+      return false;
     }
 
     isAuthenticated = true;
+    return true;
   }
 }
